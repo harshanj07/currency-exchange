@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    h1 {
+        color: #333;
+    }
+
+    form {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+    }
+
+    select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    #result {
+        margin-top: 20px;
+        font-size: 18px;
+        color: #333;
+    }
+</style>
+<body>
+    <h1>Currency Converter</h1>
+    <form id="currency-form">
+        <label for="from-currency">From:</label>
+        <select id="from-currency" name="from_currency">
+            <!-- Options will be populated by JavaScript -->
+        </select>
+        <label for="to-currency">To:</label>
+        <select id="to-currency" name="to_currency">
+            <!-- Options will be populated by JavaScript -->
+        </select>
+        <button type="submit">Convert</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currencies = ["EUR", "USD", "GBP", "CAD", "AUD", "JPY", "INR"]; // Add more currencies as needed
+            const fromCurrencySelect = document.getElementById('from-currency');
+            const toCurrencySelect = document.getElementById('to-currency');
+
+            currencies.forEach(currency => {
+                const optionFrom = document.createElement('option');
+                optionFrom.value = currency;
+                optionFrom.text = currency;
+                fromCurrencySelect.appendChild(optionFrom);
+
+                const optionTo = document.createElement('option');
+                optionTo.value = currency;
+                optionTo.text = currency;
+                toCurrencySelect.appendChild(optionTo);
+            });
+
+            document.getElementById('currency-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const fromCurrency = fromCurrencySelect.value;
+                const toCurrency = toCurrencySelect.value;
+
+                fetch(`/convert?from=${fromCurrency}&to=${toCurrency}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('result').innerText = `1 ${fromCurrency} = ${data.rate} ${toCurrency}`;
+                    });
+            });
+        });
+    </script>
+</body>
+</html>
